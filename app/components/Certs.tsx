@@ -12,6 +12,9 @@ export function Certs() {
           <p className="mb-2 text-[0.6875rem] font-sans uppercase tracking-[0.1em] text-text-muted">
             Certificaciones
           </p>
+          <h2 className="font-serif text-2xl text-text-primary md:text-[1.75rem]">
+            Formación
+          </h2>
 
           <div className="mt-6 flex flex-wrap gap-2">
             {highlighted.map((cert) => {

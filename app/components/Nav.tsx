@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const WHATSAPP_URL =
@@ -14,9 +14,21 @@ const NAV_LINKS = [
 
 export function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [menuOpen]);
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-bg-primary/85 backdrop-blur-md">
+    <nav ref={navRef} className="sticky top-0 z-50 border-b border-border bg-bg-primary/85 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <a href="#" className="font-serif text-xl font-bold text-text-primary">
           JDL

@@ -18,7 +18,7 @@ export const projects: Project[] = [
     pitch: "Plataforma de coordinación multi-agente con dashboard de observabilidad en tiempo real. Tesis de ingeniería.",
     category: "ai",
     stack: ["Claude API", "FastAPI", "SQLite", "MCP"],
-    image: "/projects/pm-agente.webp",
+    image: "", // placeholder until real screenshot is added
     repoUrl: "https://github.com/josedaluz/pm-agente",
     status: "live",
   },
@@ -28,7 +28,7 @@ export const projects: Project[] = [
     pitch: "Bot de automatización para gestión de gimnasios vía WhatsApp. Solución replicable como producto.",
     category: "ai",
     stack: ["n8n", "Supabase", "Kapso", "WhatsApp API"],
-    image: "/projects/hsp70.webp",
+    image: "", // placeholder until real screenshot is added
     repoUrl: "https://github.com/josedaluz/hsp70",
     status: "live",
   },
@@ -38,7 +38,7 @@ export const projects: Project[] = [
     pitch: "Sistema de recuperación de información sobre documentos con arquitectura hexagonal. Búsqueda semántica en tiempo real.",
     category: "ai",
     stack: ["LangChain", "FastAPI", "Supabase pgvector", "Gemini"],
-    image: "/projects/rag.webp",
+    image: "", // placeholder until real screenshot is added
     repoUrl: "https://github.com/josedaluz/rag-pipeline",
     status: "live",
   },
@@ -48,7 +48,7 @@ export const projects: Project[] = [
     pitch: "Workflow end-to-end: Slack command → Jira project → Tempo tracking → Google Sheets reports con notificaciones automáticas.",
     category: "ai",
     stack: ["n8n", "Jira", "Tempo", "Slack", "Google Sheets"],
-    image: "/projects/jira.webp",
+    image: "", // placeholder until real screenshot is added
     status: "live",
   },
   {
@@ -57,7 +57,7 @@ export const projects: Project[] = [
     pitch: "Tienda online con catálogo, carrito, pagos integrados y gestión de stock.",
     category: "web",
     stack: ["Next.js", "Tailwind", "MercadoPago", "Supabase"],
-    image: "/projects/ecommerce-ropa.webp",
+    image: "", // placeholder until real screenshot is added
     status: "coming",
   },
   {
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     pitch: "Website institucional con turnos online, equipo médico y servicios.",
     category: "web",
     stack: ["Next.js", "Tailwind", "Google Calendar API"],
-    image: "/projects/oftalmologia.webp",
+    image: "", // placeholder until real screenshot is added
     status: "coming",
   },
 ];

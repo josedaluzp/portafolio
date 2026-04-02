@@ -5,10 +5,10 @@ export interface Certification {
 }
 
 export const certifications: Certification[] = [
-  { name: "Claude Code in Action", provider: "anthropic", url: "" },
-  { name: "Agent Skills", provider: "anthropic", url: "" },
-  { name: "AI Fluency", provider: "anthropic", url: "" },
-  { name: "Python", provider: "udemy", url: "" },
-  { name: "React", provider: "platzi", url: "" },
-  { name: "FastAPI", provider: "udemy", url: "" },
+  { name: "Claude Code in Action", provider: "anthropic" },
+  { name: "Agent Skills", provider: "anthropic" },
+  { name: "AI Fluency", provider: "anthropic" },
+  { name: "Python", provider: "udemy" },
+  { name: "React", provider: "platzi" },
+  { name: "FastAPI", provider: "udemy" },
 ];
