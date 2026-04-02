@@ -1,14 +1,16 @@
+import Image from "next/image";
 import { Project } from "@/data/projects";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="group relative overflow-hidden rounded-lg bg-bg-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
-      <div className="aspect-video w-full bg-border">
+      <div className="aspect-video w-full bg-border relative">
         {project.image && project.status !== "coming" ? (
-          <img
+          <Image
             src={project.image}
             alt={project.title}
-            className="h-full w-full object-cover"
+            fill
+            className="object-cover"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-text-muted text-sm">
