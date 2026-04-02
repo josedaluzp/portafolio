@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, DM_Sans } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -39,7 +40,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans">{children}</body>
+      <body className="font-sans"><ThemeProvider>{children}</ThemeProvider></body>
     </html>
   );
 }
