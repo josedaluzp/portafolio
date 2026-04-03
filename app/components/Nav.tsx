@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const WHATSAPP_URL =
-  "https://wa.me/54XXXXXXXXXX?text=Hola%20Jos%C3%A9%2C%20vi%20tu%20portfolio%20y%20me%20interesa%20consultar%20sobre%20tus%20servicios.";
+  "https://wa.me/542975027842?text=Hola%20Jos%C3%A9%2C%20vi%20tu%20portfolio%20y%20me%20interesa%20consultar%20sobre%20tus%20servicios.";
 
 const NAV_LINKS = [
   { href: "#proyectos", label: "Proyectos" },

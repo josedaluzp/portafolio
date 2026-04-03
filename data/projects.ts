@@ -13,41 +13,30 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: "pm-agente",
-    title: "PM-AGENTE",
-    pitch: "Plataforma de coordinación multi-agente con dashboard de observabilidad en tiempo real. Tesis de ingeniería.",
+    id: "forge",
+    title: "FORGE",
+    pitch: "Un solo desarrollador gestionando múltiples proyectos en paralelo. FORGE coordina agentes de IA que planifican, ejecutan y monitorean tareas de desarrollo de forma autónoma.",
     category: "ai",
-    stack: ["Claude API", "FastAPI", "SQLite", "MCP"],
+    stack: ["Claude API", "Python", "FastAPI", "SQLite", "WebSockets"],
     image: "", // placeholder until real screenshot is added
-    repoUrl: "https://github.com/josedaluz/pm-agente",
     status: "live",
   },
   {
     id: "hsp70",
-    title: "HSP-70 WhatsApp Bot",
-    pitch: "Bot de automatización para gestión de gimnasios vía WhatsApp. Solución replicable como producto.",
+    title: "HSP-70 Gestión Fitness",
+    pitch: "Un gimnasio gestionaba socios, pagos y rutinas en planillas y cuadernos. Hoy opera con un sistema integral que centraliza toda la administración.",
     category: "ai",
-    stack: ["n8n", "Supabase", "Kapso", "WhatsApp API"],
+    stack: ["FastAPI", "React", "SQLAlchemy", "MercadoPago", "Tailwind"],
     image: "", // placeholder until real screenshot is added
-    repoUrl: "https://github.com/josedaluz/hsp70",
+    repoUrl: "https://github.com/josedaluzp/hsp70-gestion",
     status: "live",
   },
   {
-    id: "rag",
-    title: "RAG Pipeline",
-    pitch: "Sistema de recuperación de información sobre documentos con arquitectura hexagonal. Búsqueda semántica en tiempo real.",
+    id: "tracker-servicios",
+    title: "Tracker de Servicios",
+    pitch: "Clientes que no recibían actualizaciones sobre el estado de sus servicios. Ahora reciben notificaciones automáticas por SMS y llamadas en cada etapa.",
     category: "ai",
-    stack: ["LangChain", "FastAPI", "Supabase pgvector", "Gemini"],
-    image: "", // placeholder until real screenshot is added
-    repoUrl: "https://github.com/josedaluz/rag-pipeline",
-    status: "live",
-  },
-  {
-    id: "jira",
-    title: "Jira Automation Orchestrator",
-    pitch: "Workflow end-to-end: Slack command → Jira project → Tempo tracking → Google Sheets reports con notificaciones automáticas.",
-    category: "ai",
-    stack: ["n8n", "Jira", "Tempo", "Slack", "Google Sheets"],
+    stack: ["n8n", "Twilio", "Google Drive"],
     image: "", // placeholder until real screenshot is added
     status: "live",
   },
@@ -56,16 +45,61 @@ export const projects: Project[] = [
     title: "E-commerce de ropa informal",
     pitch: "Tienda online con catálogo, carrito, pagos integrados y gestión de stock.",
     category: "web",
-    stack: ["Next.js", "Tailwind", "MercadoPago", "Supabase"],
+    stack: ["Tiendanube", "MercadoPago", "CSS personalizado"],
     image: "", // placeholder until real screenshot is added
     status: "coming",
   },
   {
     id: "oftalmologia",
     title: "Centro de Oftalmología",
-    pitch: "Website institucional con turnos online, equipo médico y servicios.",
+    pitch: "Catálogo de lentes, solicitud de visitas y consultas online para centro oftalmológico.",
     category: "web",
     stack: ["Next.js", "Tailwind", "Google Calendar API"],
+    image: "", // placeholder until real screenshot is added
+    status: "coming",
+  },
+  {
+    id: "consultorio-odontologico",
+    title: "Consultorio Odontológico",
+    pitch: "Turnero online con selección de especialistas, solicitud de visitas y perfil del consultorio.",
+    category: "web",
+    stack: ["Next.js", "Tailwind", "Supabase", "Google Calendar API"],
+    image: "", // placeholder until real screenshot is added
+    status: "coming",
+  },
+  {
+    id: "essen",
+    title: "Tienda Essen",
+    pitch: "Catálogo de productos Essen con fichas técnicas, precios y pedidos online.",
+    category: "web",
+    stack: ["Tiendanube", "MercadoPago", "CSS personalizado"],
+    image: "", // placeholder until real screenshot is added
+    status: "coming",
+  },
+  {
+    id: "productos-3d",
+    title: "Productos 3D",
+    pitch: "Catálogo de veladores, copas del mundo y personalizados en impresión 3D con precios y contacto por WhatsApp.",
+    category: "web",
+    stack: ["Next.js", "Tailwind", "WhatsApp API"],
+    image: "", // placeholder until real screenshot is added
+    status: "coming",
+  },
+  {
+    id: "artesanias",
+    title: "Artesanías & Deco",
+    pitch: "Tienda de velas aromáticas, difusores, lámparas nórdicas y mantas con catálogo y contacto directo.",
+    category: "web",
+    stack: ["Next.js", "Tailwind", "WhatsApp API"],
+    image: "", // placeholder until real screenshot is added
+    status: "coming",
+  },
+  {
+    id: "websites-locales",
+    title: "Websites para Locales",
+    pitch: "Desarrollo de presencia web para negocios y emprendimientos que aún no tienen su página.",
+    category: "web",
+    stack: ["Next.js", "Tailwind", "Vercel"],
     image: "", // placeholder until real screenshot is added
     status: "coming",
   },

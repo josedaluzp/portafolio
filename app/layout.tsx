@@ -19,6 +19,26 @@ export const metadata: Metadata = {
   title: "José De La Luz — Desarrollador IA & Web",
   description:
     "Desarrollo soluciones digitales con inteligencia artificial para negocios. Websites, automatización, agentes inteligentes. Córdoba, Argentina.",
+  metadataBase: new URL("https://josedaluz.com"),
+  openGraph: {
+    title: "José De La Luz — Desarrollador IA & Web",
+    description:
+      "Desarrollo soluciones digitales con inteligencia artificial para negocios. Websites, automatización, agentes inteligentes.",
+    url: "https://josedaluz.com",
+    siteName: "José De La Luz",
+    locale: "es_AR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "José De La Luz — Desarrollador IA & Web",
+    description:
+      "Desarrollo soluciones digitales con inteligencia artificial para negocios. Websites, automatización, agentes inteligentes.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
