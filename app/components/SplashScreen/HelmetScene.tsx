@@ -90,29 +90,6 @@ export default function HelmetScene({ started, onModelLoaded, loadProgress }: He
     audioPlayed: false,
   });
 
-  // Keep started prop in sync with ref
-  useEffect(() => {
-    const s = stateRef.current;
-    const wasStarted = s.started;
-    s.started = started;
-
-    // When started transitions false -> true: kick off assembly
-    if (started && !wasStarted) {
-      if (s.camera) {
-        s.camera.position.set(0, 0.3, 9);
-      }
-      s.assemblyProgress = 0;
-      s.modelReady = false;
-
-      // Play audio after 2.5s (assembly takes ~2s)
-      setTimeout(() => {
-        if (!stateRef.current.disposed) {
-          speak();
-        }
-      }, 2500);
-    }
-  }, [started, speak]);
-
   // Speech function
   const speak = useCallback(() => {
     const s = stateRef.current;
@@ -151,6 +128,27 @@ export default function HelmetScene({ started, onModelLoaded, loadProgress }: He
       s.wordPulse = 0;
     };
   }, []);
+
+  // Keep started prop in sync with ref
+  useEffect(() => {
+    const s = stateRef.current;
+    const wasStarted = s.started;
+    s.started = started;
+
+    if (started && !wasStarted) {
+      if (s.camera) {
+        s.camera.position.set(0, 0.3, 9);
+      }
+      s.assemblyProgress = 0;
+      s.modelReady = false;
+
+      setTimeout(() => {
+        if (!stateRef.current.disposed) {
+          speak();
+        }
+      }, 2500);
+    }
+  }, [started, speak]);
 
   // Initialize Three.js scene (once on mount)
   useEffect(() => {

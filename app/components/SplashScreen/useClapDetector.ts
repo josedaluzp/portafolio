@@ -108,7 +108,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
       };
 
       animationFrameRef.current = requestAnimationFrame(detect);
-    } catch (err) {
+    } catch {
       // Permission denied or device unavailable
       setMicAvailable(false);
     }

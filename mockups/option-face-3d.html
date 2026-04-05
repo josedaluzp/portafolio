@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jose Da Luz — AI Lab</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root { --bg: #050508; --text: #f0ede6; --cyan: #00d4ff; --gold-1: #d4a853; --gold-2: #f0c66e; }
+  body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; height: 100vh; overflow: hidden; }
+
+  /* Background animated canvas */
+  #bgCanvas { position: fixed; inset: 0; z-index: 0; }
+
+  /* Three.js canvas — transparent, above bg */
+  #canvas-container { position: fixed; top: 0; left: 0; right: 0; height: 58vh; z-index: 2; }
+  canvas { display: block; }
+
+  /* Click-to-start */
+  .start-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(3,3,6,0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: opacity 1.2s ease, visibility 1.2s ease; }
+  .start-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .start-overlay p { font-size: 0.8rem; color: #555; letter-spacing: 0.14em; text-transform: uppercase; margin-top: 1.5rem; }
+  .start-ring { width: 72px; height: 72px; border: 1.5px solid rgba(255,255,255,0.12); border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+  .start-ring::after { content: ''; border-style: solid; border-width: 10px 0 10px 18px; border-color: transparent transparent transparent rgba(255,255,255,0.4); margin-left: 4px; }
+  .start-overlay:hover .start-ring { border-color: rgba(0,212,255,0.5); transform: scale(1.08); }
+
+  /* Loading */
+  .loader-bar-container { position: fixed; bottom: 40%; left: 50%; transform: translateX(-50%); z-index: 90; width: 200px; text-align: center; transition: opacity 0.8s; pointer-events: none; }
+  .loader-bar-container.hidden { opacity: 0; visibility: hidden; }
+  .loader-bar-track { width: 100%; height: 2px; background: rgba(255,255,255,0.06); border-radius: 1px; overflow: hidden; margin-top: 0.8rem; }
+  .loader-bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, var(--cyan), var(--gold-1)); transition: width 0.2s; }
+  .loader-text { font-size: 0.6rem; color: rgba(255,255,255,0.25); letter-spacing: 0.15em; text-transform: uppercase; }
+  .loader-percent { font-size: 0.55rem; color: rgba(255,255,255,0.2); margin-top: 0.4rem; }
+
+  /* Text overlay — positioned at bottom */
+  .overlay { position: fixed; bottom: 0; left: 0; right: 0; top: 58vh; z-index: 10; text-align: center; padding-top: 2rem; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
+  .welcome { font-family: Georgia, serif; font-size: 0.9rem; color: rgba(240,237,230,0.5); letter-spacing: 0.08em; opacity: 0; animation: fadeUp 0.8s ease 2.6s forwards; }
+  .name { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 700; letter-spacing: -0.02em; background: linear-gradient(135deg, var(--gold-1), var(--gold-2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin: 0.2rem 0 0.3rem; opacity: 0; animation: fadeUp 0.8s ease 2.9s forwards; }
+  .subtitle { font-size: 0.85rem; color: rgba(240,237,230,0.4); letter-spacing: 0.15em; text-transform: uppercase; font-weight: 300; opacity: 0; animation: fadeUp 0.8s ease 3.2s forwards; }
+  .divider { width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold-1), transparent); margin: 1rem auto; opacity: 0; animation: fadeUp 0.8s ease 3.5s forwards; }
+  .clap-area { display: flex; align-items: center; justify-content: center; gap: 0.8rem; opacity: 0; animation: fadeUp 0.8s ease 3.8s forwards; }
+  .clap-icon { font-size: 1.8rem; width: 52px; height: 52px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 1.5px solid rgba(212,168,83,0.3); background: rgba(212,168,83,0.05); animation: clap-pulse 2.5s ease-in-out infinite; }
+  .clap-icon:nth-child(2) { animation-delay: 0.4s; }
+  .clap-text { font-size: 0.7rem; color: rgba(240,237,230,0.4); letter-spacing: 0.08em; text-transform: uppercase; }
+  @keyframes clap-pulse { 0%,100% { border-color: rgba(212,168,83,0.2); transform: scale(1); box-shadow: none; } 50% { border-color: rgba(212,168,83,0.5); transform: scale(1.08); box-shadow: 0 0 15px rgba(212,168,83,0.15); } }
+  .status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--cyan); text-transform: uppercase; margin-top: 0.6rem; opacity: 0; animation: fadeUp 0.8s ease 4.1s forwards; }
+  .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); animation: pulse-dot 2s ease infinite; }
+
+  .error-overlay { position: fixed; inset: 0; z-index: 200; background: var(--bg); display: none; flex-direction: column; align-items: center; justify-content: center; color: #f44; font-size: 0.9rem; }
+  .error-overlay.visible { display: flex; }
+
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulse-dot { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+</style>
+</head>
+<body>
+
+<!-- Animated cyberpunk background -->
+<canvas id="bgCanvas"></canvas>
+
+<div class="start-overlay" id="startOverlay">
+  <div class="start-ring"></div>
+  <p>Click para iniciar</p>
+</div>
+
+<div class="loader-bar-container" id="loaderBar">
+  <div class="loader-text">Cargando modelo</div>
+  <div class="loader-bar-track"><div class="loader-bar-fill" id="loaderFill"></div></div>
+  <div class="loader-percent" id="loaderPercent">0%</div>
+</div>
+
+<div class="error-overlay" id="errorOverlay">
+  <strong>No se pudo cargar el modelo 3D</strong>
+  <p id="errorMsg"></p>
+</div>
+
+<div id="canvas-container"></div>
+
+<div class="overlay">
+  <p class="welcome">Bienvenido al laboratorio de</p>
+  <h1 class="name">Jose Da Luz</h1>
+  <p class="subtitle">INGENIERO EN SOFTWARE</p>
+  <div class="divider"></div>
+  <div class="clap-area">
+    <div class="clap-icon">👏</div>
+    <span class="clap-text">APLAUDÍ DOS VECES PARA VER SUS PROYECTOS</span>
+    <div class="clap-icon">👏</div>
+  </div>
+  <div class="status"><span class="dot"></span>ESCUCHANDO</div>
+</div>
+
+<!-- ═══════ BACKGROUND: Matrix/Cyberpunk rain ═══════ -->
+<script>
+(function() {
+  const bg = document.getElementById('bgCanvas');
+  const ctx = bg.getContext('2d');
+  let W, H, columns, drops;
+  const chars = '01アイウエオカキクケコ:;{}[]<>/=+*#@'.split('');
+  const fontSize = 14;
+
+  function initBg() {
+    W = bg.width = innerWidth;
+    H = bg.height = innerHeight;
+    columns = Math.floor(W / fontSize);
+    drops = Array.from({ length: columns }, () => Math.random() * -50);
+  }
+  initBg();
+  window.addEventListener('resize', initBg);
+
+  function drawBg() {
+    // Semi-transparent black overlay for trail effect
+    ctx.fillStyle = 'rgba(3, 3, 6, 0.06)';
+    ctx.fillRect(0, 0, W, H);
+
+    ctx.font = fontSize + 'px monospace';
+
+    for (let i = 0; i < columns; i++) {
+      const char = chars[Math.floor(Math.random() * chars.length)];
+      const x = i * fontSize;
+      const y = drops[i] * fontSize;
+
+      // Gradient: bright head, dimmer trail
+      const brightness = Math.random();
+      if (brightness > 0.97) {
+        ctx.fillStyle = '#ffffff'; // rare bright white flash
+      } else if (brightness > 0.9) {
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.9)'; // cyan
+      } else {
+        ctx.fillStyle = 'rgba(0, 100, 140, 0.25)'; // dim teal
+      }
+
+      ctx.fillText(char, x, y);
+
+      if (y > H && Math.random() > 0.975) {
+        drops[i] = 0;
+      }
+      drops[i] += 0.4 + Math.random() * 0.3; // slow rain speed
+    }
+    requestAnimationFrame(drawBg);
+  }
+  drawBg();
+})();
+</script>
+
+<!-- ═══════ THREE.JS: Iron Man Helmet ═══════ -->
+<script type="importmap">
+{ "imports": { "three": "https://unpkg.com/three@0.160.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+// ── State
+let started = false, modelLoaded = false, modelReady = false;
+let isSpeaking = false, wordPulse = 0, assemblyProgress = 0, time = 0;
+let mouseX = 0, mouseY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / innerWidth - 0.5) * 2;
+  mouseY = (e.clientY / innerHeight - 0.5) * 2;
+});
+
+// ── Scene (transparent background — shows bgCanvas behind)
+const scene = new THREE.Scene();
+// No scene.background — renderer alpha:true makes it transparent
+
+const camera = new THREE.PerspectiveCamera(35, innerWidth / (innerHeight * 0.58), 0.1, 100);
+camera.position.set(0, 0.3, 5.0);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setClearColor(0x000000, 0); // transparent
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const ctnr = document.getElementById('canvas-container');
+renderer.setSize(ctnr.clientWidth, ctnr.clientHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.8;
+renderer.shadowMap.enabled = false; // no shadows needed, saves perf
+document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+// ── Environment map (for metallic reflections)
+const pmrem = new THREE.PMREMGenerator(renderer);
+const envScene = new THREE.Scene();
+envScene.background = new THREE.Color(0x111122);
+[
+  { color: 0x4488ff, intensity: 80, pos: [5, 5, 5] },
+  { color: 0xff6633, intensity: 60, pos: [-5, 3, -3] },
+  { color: 0x22ddee, intensity: 70, pos: [0, -4, 5] },
+  { color: 0xffffff, intensity: 40, pos: [3, -2, -5] },
+  { color: 0x8844ff, intensity: 50, pos: [-3, 5, 0] },
+].forEach(l => {
+  const p = new THREE.PointLight(l.color, l.intensity, 0);
+  p.position.set(...l.pos);
+  envScene.add(p);
+});
+const envMap = pmrem.fromScene(envScene, 0.04).texture;
+scene.environment = envMap;
+pmrem.dispose();
+
+// ── Lighting (clean, no bloom artifacts)
+scene.add(new THREE.AmbientLight(0x334466, 0.6));
+scene.add(new THREE.HemisphereLight(0x8899cc, 0x443322, 0.8));
+
+const key = new THREE.DirectionalLight(0xffeedd, 2.0);
+key.position.set(3, 4, 3);
+scene.add(key);
+
+const fill = new THREE.DirectionalLight(0x3366cc, 0.8);
+fill.position.set(-4, 1, 3);
+scene.add(fill);
+
+const rim = new THREE.DirectionalLight(0x00ddff, 1.2);
+rim.position.set(0, 2, -5);
+scene.add(rim);
+
+const front = new THREE.DirectionalLight(0xddeeff, 1.0);
+front.position.set(0, 0.5, 5);
+scene.add(front);
+
+// ── Head group
+const headGroup = new THREE.Group();
+headGroup.scale.setScalar(0);
+scene.add(headGroup);
+
+// ── Eye fills: wide flat boxes positioned BEHIND the eye slits
+// Based on wireframe analysis: eyes are angular slits at ~Y=0.12, X=±0.25
+// Eye fills — positioned to match the eye slits exactly
+const eyeBoxGeo = new THREE.BoxGeometry(0.42, 0.11, 0.02);
+const eyeFillMatL = new THREE.MeshBasicMaterial({ color: 0x55ccff, transparent: true, opacity: 0.1 });
+const eyeFillMatR = new THREE.MeshBasicMaterial({ color: 0x55ccff, transparent: true, opacity: 0.1 });
+const leftEyeFill = new THREE.Mesh(eyeBoxGeo, eyeFillMatL);
+const rightEyeFill = new THREE.Mesh(eyeBoxGeo, eyeFillMatR);
+leftEyeFill.position.set(-0.22, 0.08, 0.43);
+rightEyeFill.position.set(0.22, 0.08, 0.43);
+leftEyeFill.rotation.z = 0.05;
+rightEyeFill.rotation.z = -0.05;
+
+const leftEyeLight = new THREE.PointLight(0x44ccff, 0.3, 3);
+leftEyeLight.position.set(-0.22, 0.10, 0.5);
+const rightEyeLight = new THREE.PointLight(0x44ccff, 0.3, 3);
+rightEyeLight.position.set(0.22, 0.10, 0.5);
+
+headGroup.add(leftEyeFill, rightEyeFill, leftEyeLight, rightEyeLight);
+
+// ── Load model
+const loaderEl = document.getElementById('loaderBar');
+const fillEl = document.getElementById('loaderFill');
+const percentEl = document.getElementById('loaderPercent');
+
+new GLTFLoader().load('iron_man_helmet.glb', (gltf) => {
+  const model = gltf.scene;
+  const box = new THREE.Box3().setFromObject(model);
+  const center = box.getCenter(new THREE.Vector3());
+  const size = box.getSize(new THREE.Vector3());
+  const sc = 2.2 / Math.max(size.x, size.y, size.z);
+
+  model.scale.setScalar(sc);
+  model.position.set(-center.x * sc, -center.y * sc, -center.z * sc);
+
+  model.traverse((child) => {
+    if (child.isMesh && child.material) {
+      child.material.metalness = 0.85;
+      child.material.roughness = 0.2;
+      child.material.envMap = envMap;
+      child.material.envMapIntensity = 1.5;
+      child.material.side = THREE.DoubleSide;
+      child.material.needsUpdate = true;
+    }
+  });
+
+  headGroup.add(model);
+  modelLoaded = true;
+  loaderEl.classList.add('hidden');
+}, (xhr) => {
+  if (xhr.lengthComputable) {
+    const pct = Math.round((xhr.loaded / xhr.total) * 100);
+    fillEl.style.width = pct + '%';
+    percentEl.textContent = pct + '%';
+  } else {
+    percentEl.textContent = (xhr.loaded / 1048576).toFixed(1) + ' MB';
+    fillEl.style.width = Math.min(95, Math.round(xhr.loaded / 45000)) + '%';
+  }
+}, (err) => {
+  loaderEl.classList.add('hidden');
+  document.getElementById('errorOverlay').classList.add('visible');
+  document.getElementById('errorMsg').textContent = err.message || 'Error de carga';
+});
+
+// ── Easing
+function easeOutCubic(t) { return 1 - (1 - t) ** 3; }
+
+// ── Assembly
+function animateAssembly(dt) {
+  if (!modelLoaded || assemblyProgress >= 1) {
+    if (modelLoaded && assemblyProgress >= 1) modelReady = true;
+    return;
+  }
+  assemblyProgress = Math.min(1, assemblyProgress + dt * 0.5);
+  const t = easeOutCubic(assemblyProgress);
+
+  camera.position.z = 9 - (9 - 5.8) * t;
+  camera.position.y = 0.5;
+  camera.lookAt(0, 0, 0);
+  headGroup.scale.setScalar(t);
+
+  if (assemblyProgress > 0.85) {
+    const flash = (assemblyProgress - 0.85) / 0.15;
+    leftEyeLight.intensity = flash * 4.0;
+    rightEyeLight.intensity = flash * 4.0;
+  }
+}
+
+// ── Idle
+function animateIdle(dt) {
+  if (!modelReady) return;
+
+  // Follow cursor
+  const fx = mouseX * 0.2;
+  const fy = mouseY * 0.1;
+  headGroup.rotation.y += (fx - headGroup.rotation.y) * 0.025;
+  headGroup.rotation.x += (fy - headGroup.rotation.x) * 0.025;
+
+  // Float
+  headGroup.position.y = Math.sin(time * 0.7) * 0.03;
+
+  // Eye spheres + lights — FILL with blue light when speaking
+  if (isSpeaking) {
+    const wp = Math.min(1, wordPulse);
+    const targetOp = 0.95; // fully bright while any audio plays
+    const targetInt = 6.0 + wp * 2.0;
+    leftEyeFill.material.opacity += (targetOp - leftEyeFill.material.opacity) * 0.2;
+    rightEyeFill.material.opacity += (targetOp - rightEyeFill.material.opacity) * 0.2;
+    leftEyeFill.material.color.setHex(0x88eeff); // brighter when speaking
+    rightEyeFill.material.color.setHex(0x88eeff);
+    leftEyeLight.intensity += (targetInt - leftEyeLight.intensity) * 0.15;
+    rightEyeLight.intensity += (targetInt - rightEyeLight.intensity) * 0.15;
+    wordPulse *= 0.88;
+  } else {
+    // Idle: dim subtle glow
+    const p = 0.12 + Math.sin(time * 1.0) * 0.08;
+    const lp = 0.3 + Math.sin(time * 1.0) * 0.2;
+    leftEyeFill.material.opacity += (p - leftEyeFill.material.opacity) * 0.04;
+    rightEyeFill.material.opacity += (p - rightEyeFill.material.opacity) * 0.04;
+    leftEyeFill.material.color.setHex(0x55ccff);
+    rightEyeFill.material.color.setHex(0x55ccff);
+    leftEyeLight.intensity += (lp - leftEyeLight.intensity) * 0.04;
+    rightEyeLight.intensity += (lp - rightEyeLight.intensity) * 0.04;
+  }
+}
+
+// ── Speech (MP3 audio + volume analysis for eye sync)
+const audio = new Audio('saludo.mp3');
+let audioCtx, analyser, audioSource, dataArray;
+
+function speak() {
+  // Setup audio analyser on first play
+  if (!audioCtx) {
+    audioCtx = new AudioContext();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 256;
+    analyser.smoothingTimeConstant = 0.7;
+    audioSource = audioCtx.createMediaElementSource(audio);
+    audioSource.connect(analyser);
+    analyser.connect(audioCtx.destination);
+    dataArray = new Uint8Array(analyser.frequencyBinCount);
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  audio.currentTime = 0;
+  audio.play();
+  isSpeaking = true;
+
+  audio.onended = () => { isSpeaking = false; wordPulse = 0; };
+}
+
+// Call this in the animation loop to get real-time volume
+function updateAudioPulse() {
+  if (!isSpeaking || !analyser) return;
+  analyser.getByteFrequencyData(dataArray);
+  // Average volume in speech frequency range (300-3000Hz ≈ bins 2-25)
+  let sum = 0;
+  for (let i = 2; i < 25; i++) sum += dataArray[i];
+  const avg = sum / 23 / 255; // 0..1
+  wordPulse = avg > 0.1 ? avg * 1.5 : 0; // threshold + amplify
+}
+
+// ── Resize
+window.addEventListener('resize', () => {
+  const c = document.getElementById('canvas-container');
+  camera.aspect = c.clientWidth / c.clientHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(c.clientWidth, c.clientHeight);
+});
+
+// ── Render loop
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = clock.getDelta();
+  time += dt;
+  if (started) { animateAssembly(dt); animateIdle(dt); updateAudioPulse(); }
+  renderer.render(scene, camera); // direct render, no bloom/composer
+}
+animate();
+
+// ── Start
+document.getElementById('startOverlay').addEventListener('click', () => {
+  document.getElementById('startOverlay').classList.add('hidden');
+  started = true;
+  camera.position.set(0, 0.3, 9);
+  setTimeout(() => speak(), 2500);
+});
+</script>
+</body>
+</html>
