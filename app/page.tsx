@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { Nav } from "./components/Nav";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
@@ -6,7 +10,18 @@ import { Stack } from "./components/Stack";
 import { Certs } from "./components/Certs";
 import { Footer } from "./components/Footer";
 
+const SplashScreen = dynamic(
+  () => import('./components/SplashScreen/SplashScreen'),
+  { ssr: false }
+);
+
 export default function Home() {
+  const [showPortfolio, setShowPortfolio] = useState(false);
+
+  if (!showPortfolio) {
+    return <SplashScreen onComplete={() => setShowPortfolio(true)} />;
+  }
+
   return (
     <>
       <Nav />
