@@ -9,6 +9,7 @@ import { Services } from "./components/Services";
 import { Stack } from "./components/Stack";
 import { Certs } from "./components/Certs";
 import { Footer } from "./components/Footer";
+import { LanguageProvider } from "./i18n";
 
 const SplashScreen = dynamic(
   () => import('./components/SplashScreen/SplashScreen'),
@@ -23,7 +24,7 @@ export default function Home() {
   }
 
   return (
-    <>
+    <LanguageProvider>
       <Nav />
       <main>
         <Hero />
@@ -33,6 +34,6 @@ export default function Home() {
         <Certs />
       </main>
       <Footer />
-    </>
+    </LanguageProvider>
   );
 }
