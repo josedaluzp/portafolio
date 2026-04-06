@@ -102,4 +102,4 @@ export const translations = {
 } as const;
 
 export type Lang = 'es' | 'en';
-export type TranslationKeys = typeof translations.es;
+export type TranslationKeys = (typeof translations)[Lang];
