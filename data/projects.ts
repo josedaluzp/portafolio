@@ -46,7 +46,7 @@ export const projects: Project[] = [
     title: "Tracker de Servicios",
     pitch: "Clientes que no recibían actualizaciones sobre el estado de sus servicios. Ahora reciben notificaciones automáticas por SMS y llamadas en cada etapa.",
     category: "ai",
-    stack: ["n8n", "Twilio", "Google Drive"],
+    stack: ["n8n", "Gemini API", "WhatsApp API", "Google Sheets"],
     image: "", // placeholder until real screenshot is added
     status: "live",
   },
