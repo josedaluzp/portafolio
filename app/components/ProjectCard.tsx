@@ -90,7 +90,7 @@ export function ProjectCard({ project }: { project: Project }) {
             color: "var(--text)",
           }}
         >
-          {project.title}
+          {(t.projects.items as Record<string, { title: string; pitch?: string }>)[project.id]?.title || project.title}
         </h3>
 
         <p
@@ -100,7 +100,7 @@ export function ProjectCard({ project }: { project: Project }) {
             color: "var(--text-secondary)",
           }}
         >
-          {project.pitch}
+          {(t.projects.items as Record<string, { title: string; pitch?: string }>)[project.id]?.pitch || project.pitch}
         </p>
 
         {/* Stack tags */}

@@ -137,7 +137,7 @@ export function Projects() {
                     background: "transparent",
                   }}
                 >
-                  {project.title}
+                  {(t.projects.items as Record<string, { title: string }>)[project.id]?.title || project.title}
                 </span>
               ))}
             </div>
