@@ -39,7 +39,10 @@
       "Bash(cp mockups/iron_man_helmet.glb public/models/)",
       "Bash(cp mockups/saludo.mp3 public/audio/)",
       "Bash(npx tsc:*)",
-      "Bash(npx next:*)"
+      "Bash(npx next:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(rm -rf .next)",
+      "Bash(ffprobe -i \"C:/Users/PC/jose/portafolio/public/audio/saludo.mp3\" -show_entries format=duration -v quiet -of csv=\"p=0\")"
     ]
   }
 }

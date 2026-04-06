@@ -51,7 +51,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
   }, []);
 
   const startListening = useCallback(async () => {
-    if (!enabled || detectedRef.current) return;
+    if (detectedRef.current) return;
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });

@@ -17,15 +17,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [showFallback, setShowFallback] = useState(false);
 
   const { detected, clapCount, startListening } = useClapDetector({
-    requiredClaps: 2,
+    requiredClaps: 1,
     enabled: started,
   });
 
   // Handle click-to-start
   const handleStart = useCallback(() => {
     setStarted(true);
-    startListening();
-  }, [startListening]);
+  }, []);
 
   // Handle model loaded callback
   const handleModelLoaded = useCallback(() => {
@@ -37,11 +36,19 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     setLoadProgress(pct);
   }, []);
 
-  // Show fallback button after 5 seconds once started
+  // After start: show fallback button at 5s, start mic at 10s
   useEffect(() => {
     if (!started) return;
-    const timer = setTimeout(() => setShowFallback(true), 5000);
-    return () => clearTimeout(timer);
+    const fallbackTimer = setTimeout(() => setShowFallback(true), 5000);
+    const micTimer = setTimeout(() => {
+      console.log('[SplashScreen] Starting clap detection...');
+      startListening();
+    }, 10000);
+    return () => {
+      clearTimeout(fallbackTimer);
+      clearTimeout(micTimer);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started]);
 
   // Handle clap detection
@@ -139,48 +146,59 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
       >
         {/* Welcome text */}
         <p
-          className={`font-serif text-[0.9rem] tracking-[0.08em] opacity-0 ${
+          className={`text-[0.65rem] tracking-[0.4em] uppercase font-extralight opacity-0 ${
             started ? 'animate-fade-up [animation-delay:2.6s]' : ''
           }`}
-          style={{ color: 'rgba(240,237,230,0.5)' }}
+          style={{ color: 'rgba(0,212,255,0.4)', fontFamily: "var(--font-outfit), sans-serif" }}
         >
-          Bienvenido al laboratorio de
+          LABORATORIO DE INNOVACION
         </p>
 
         {/* Name */}
         <h1
-          className={`text-[clamp(2rem,5vw,3.2rem)] font-bold tracking-[-0.02em] my-1 opacity-0 ${
+          className={`text-[clamp(2rem,5vw,3.2rem)] tracking-[0.08em] my-2 opacity-0 ${
             started ? 'animate-fade-up [animation-delay:2.9s]' : ''
           }`}
-          style={{
-            background: 'linear-gradient(135deg, #d4a853, #f0c66e)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
+          style={{ fontFamily: "var(--font-outfit), sans-serif", fontWeight: 200, color: '#f0ede6' }}
         >
-          Jose Da Luz
+          JOSE{' '}
+          <strong
+            style={{
+              fontWeight: 700,
+              background: 'linear-gradient(90deg, #00d4ff, #d4a853)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
+            DA LUZ
+          </strong>
         </h1>
-
-        {/* Subtitle */}
-        <p
-          className={`text-[0.85rem] tracking-[0.15em] uppercase font-light opacity-0 ${
-            started ? 'animate-fade-up [animation-delay:3.2s]' : ''
-          }`}
-          style={{ color: 'rgba(240,237,230,0.4)' }}
-        >
-          INGENIERO EN SOFTWARE
-        </p>
 
         {/* Divider */}
         <div
-          className={`w-10 h-px mx-auto my-4 opacity-0 ${
-            started ? 'animate-fade-up [animation-delay:3.5s]' : ''
+          className={`w-[50px] h-px mx-auto opacity-0 ${
+            started ? 'animate-fade-up [animation-delay:3.2s]' : ''
           }`}
-          style={{
-            background:
-              'linear-gradient(90deg, transparent, #d4a853, transparent)',
-          }}
+          style={{ background: 'linear-gradient(90deg, transparent, #00d4ff, transparent)' }}
+        />
+
+        {/* Subtitle */}
+        <p
+          className={`text-[0.75rem] tracking-[0.1em] mt-3 opacity-0 ${
+            started ? 'animate-fade-up [animation-delay:3.4s]' : ''
+          }`}
+          style={{ color: 'rgba(240,237,230,0.3)', fontFamily: "var(--font-space-grotesk), sans-serif" }}
+        >
+          Transformando ideas en soluciones con AI
+        </p>
+
+        {/* Second divider for spacing */}
+        <div
+          className={`w-8 h-px mx-auto my-3 opacity-0 ${
+            started ? 'animate-fade-up [animation-delay:3.6s]' : ''
+          }`}
+          style={{ background: 'linear-gradient(90deg, transparent, #d4a853, transparent)' }}
         />
 
         {/* Clap area */}
