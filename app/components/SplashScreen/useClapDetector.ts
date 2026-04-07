@@ -20,7 +20,6 @@ function useClapDetector(options?: UseClapDetectorOptions): {
     requiredClaps = 2,
     clapWindow = 2000,
     cooldown = 400,
-    enabled = true,
   } = options ?? {};
 
   const [detected, setDetected] = useState(false);
