@@ -26,7 +26,7 @@ export const translations = {
       items: {
         forge: { title: 'FORGE', pitch: 'Un solo desarrollador gestionando múltiples proyectos en paralelo. FORGE coordina agentes de IA que planifican, ejecutan y monitorean tareas de desarrollo de forma autónoma.' },
         hsp70: { title: 'HSP-70 Gestión Fitness', pitch: 'Un gimnasio gestionaba socios, pagos y rutinas en planillas y cuadernos. Hoy opera con un sistema integral que centraliza toda la administración.' },
-        pepeai: { title: 'PepeAI', pitch: 'Pacientes con demencia que pierden conexión con su historia personal. Pepe es un asistente de voz con IA que les habla usando sus propios recuerdos, con alertas emocionales para el cuidador.' },
+        pepeai: { title: 'PepeAI', pitch: 'Compañero de memoria con IA para personas con demencia. Un asistente de voz que conversa usando recuerdos reales del paciente, genera métricas cognitivas y emocionales medibles, y alerta al cuidador en tiempo real ante episodios de agitación.' },
         'tracker-servicios': { title: 'Tracker de Servicios', pitch: 'Gestión de servicios y gastos vía WhatsApp con Twilio. Un agente de IA interpreta comandos en lenguaje natural, actualiza precios, registra gastos y consulta totales — todo sincronizado en tiempo real con Google Sheets.' },
         'ecommerce-ropa': { title: 'E-commerce de ropa informal' },
         oftalmologia: { title: 'Centro de Oftalmología' },
@@ -89,7 +89,7 @@ export const translations = {
       items: {
         forge: { title: 'FORGE', pitch: 'A single developer managing multiple projects in parallel. FORGE coordinates AI agents that plan, execute, and monitor development tasks autonomously.' },
         hsp70: { title: 'HSP-70 Fitness Management', pitch: 'A gym managed members, payments, and routines on spreadsheets and notebooks. Now it runs on an integrated system that centralizes all administration.' },
-        pepeai: { title: 'PepeAI', pitch: 'Dementia patients losing connection with their personal history. Pepe is an AI voice assistant that talks to them using their own memories, with emotional alerts for caregivers.' },
+        pepeai: { title: 'PepeAI', pitch: 'AI-powered memory companion for people with dementia. A voice assistant that converses using real patient memories, generates measurable cognitive and emotional metrics, and alerts caregivers in real time during agitation episodes.' },
         'tracker-servicios': { title: 'Service Tracker', pitch: 'Service and expense management via WhatsApp with Twilio. An AI agent interprets natural language commands, updates pricing, logs expenses, and queries totals — all synced in real time with Google Sheets.' },
         'ecommerce-ropa': { title: 'Casual Clothing E-commerce' },
         oftalmologia: { title: 'Ophthalmology Center' },

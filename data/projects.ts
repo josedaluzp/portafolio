@@ -36,7 +36,7 @@ export const projects: Project[] = [
     title: "PepeAI",
     pitch: "Pacientes con demencia que pierden conexión con su historia personal. Pepe es un asistente de voz con IA que les habla usando sus propios recuerdos, con alertas emocionales para el cuidador.",
     category: "ai",
-    stack: ["React Native", "FastAPI", "Supabase", "LangChain", "Expo"],
+    stack: ["React Native", "FastAPI", "GPT-4o", "Whisper", "ChromaDB", "Supabase"],
     image: "/projects/pepeai.png",
     repoUrl: "https://github.com/josedaluzp/pepeai",
     status: "wip",
