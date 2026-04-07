@@ -29,6 +29,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
   const streamRef = useRef<MediaStream | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const sourceRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
   const lastClapTimeRef = useRef<number>(0);
   const clapTimestampsRef = useRef<number[]>([]);
@@ -48,6 +49,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
       audioContextRef.current = null;
     }
     analyserRef.current = null;
+    sourceRef.current = null;
   }, []);
 
   const startListening = useCallback(async () => {
@@ -61,12 +63,18 @@ function useClapDetector(options?: UseClapDetectorOptions): {
       const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
 
+      // Chrome requires resume() — AudioContext starts suspended outside direct user gesture
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+
       const analyser = audioContext.createAnalyser();
       analyser.fftSize = 512;
       analyserRef.current = analyser;
 
       const source = audioContext.createMediaStreamSource(stream);
       source.connect(analyser);
+      sourceRef.current = source;
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount);
 
@@ -84,7 +92,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
 
         const now = Date.now();
 
-        if (energy > 130 && now - lastClapTimeRef.current > cooldown) {
+        if (energy > 35 && now - lastClapTimeRef.current > cooldown) {
           lastClapTimeRef.current = now;
           clapTimestampsRef.current.push(now);
 
