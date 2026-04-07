@@ -31,15 +31,20 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     if (listeningStartedRef.current) return;
     if (audioEndedRef.current && minTimeElapsedRef.current) {
       listeningStartedRef.current = true;
-      await requestPermission();
+      if (isMobile) {
+        await requestPermission();
+      }
       startListening();
     }
-  }, [requestPermission, startListening]);
+  }, [requestPermission, startListening, isMobile]);
 
-  // Handle click-to-start
+  // Handle click-to-start — desktop requests mic immediately so it's ready when audio ends
   const handleStart = useCallback(() => {
     setStarted(true);
-  }, []);
+    if (!isMobile) {
+      requestPermission();
+    }
+  }, [requestPermission, isMobile]);
 
   // Handle model loaded callback
   const handleModelLoaded = useCallback(() => {
