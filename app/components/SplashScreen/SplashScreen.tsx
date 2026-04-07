@@ -93,12 +93,12 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const handleExit = useCallback(() => {
     if (exiting) return;
     setExiting(true);
-    setTimeout(() => onComplete(), 800);
+    setTimeout(() => onComplete(), 600);
   }, [exiting, onComplete]);
 
   return (
     <div
-      className={`fixed inset-0 z-50 transition-opacity duration-[800ms] ${
+      className={`fixed inset-0 z-50 transition-opacity duration-[600ms] ${
         exiting ? 'opacity-0' : 'opacity-100'
       }`}
       style={{ background: '#050508' }}
