@@ -37,7 +37,7 @@ export const projects: Project[] = [
     pitch: "Pacientes con demencia que pierden conexión con su historia personal. Pepe es un asistente de voz con IA que les habla usando sus propios recuerdos, con alertas emocionales para el cuidador.",
     category: "ai",
     stack: ["React Native", "FastAPI", "Supabase", "LangChain", "Expo"],
-    image: "", // placeholder until real screenshot is added
+    image: "/projects/pepeai.png",
     repoUrl: "https://github.com/josedaluzp/pepeai",
     status: "wip",
   },
@@ -46,8 +46,8 @@ export const projects: Project[] = [
     title: "Tracker de Servicios",
     pitch: "Clientes que no recibían actualizaciones sobre el estado de sus servicios. Ahora reciben notificaciones automáticas por SMS y llamadas en cada etapa.",
     category: "ai",
-    stack: ["n8n", "Gemini API", "WhatsApp API", "Google Sheets"],
-    image: "", // placeholder until real screenshot is added
+    stack: ["n8n", "Gemini API", "Twilio", "Google Sheets"],
+    image: "/projects/tracker-servicios.png",
     status: "live",
   },
   {
