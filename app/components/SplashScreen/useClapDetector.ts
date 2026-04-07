@@ -85,9 +85,16 @@ function useClapDetector(options?: UseClapDetectorOptions): {
     if (detectedRef.current || !analyserRef.current) return;
 
     const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+    const listenStart = Date.now();
 
     const detect = () => {
       if (!analyserRef.current || detectedRef.current) return;
+
+      // Warmup: ignore first 1.5s to skip residual speaker noise
+      if (Date.now() - listenStart < 1500) {
+        animationFrameRef.current = requestAnimationFrame(detect);
+        return;
+      }
 
       analyserRef.current.getByteFrequencyData(dataArray);
 
