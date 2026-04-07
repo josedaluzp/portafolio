@@ -16,9 +16,10 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [exiting, setExiting] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
 
+  const isMobile = typeof window !== 'undefined' && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+
   const { detected, clapCount, requestPermission, startListening } = useClapDetector({
-    requiredClaps: 2,
-    enabled: started,
+    requiredClaps: isMobile ? 2 : 1,
   });
 
   // Track both conditions: audio ended AND minimum time elapsed
