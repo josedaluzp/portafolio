@@ -54,20 +54,24 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   // Audio finished — mark condition and try to start listening
   const handleAudioEnd = useCallback(() => {
     audioEndedRef.current = true;
+    if (!isMobile) {
+      // Desktop: no min delay needed, start as soon as audio ends
+      minTimeElapsedRef.current = true;
+    }
     tryStartListening();
-  }, [tryStartListening]);
+  }, [tryStartListening, isMobile]);
 
-  // Minimum 9s after click before mic can activate (covers animation + full audio)
-  // Also show fallback button after 12s
+  // Mobile: 15s minimum before mic activates (prevents timer-batching bugs)
+  // Desktop: no minimum delay, just wait for audio to end
   useEffect(() => {
     if (!started) return;
-    const minTimer = setTimeout(() => {
+    const minTimer = isMobile ? setTimeout(() => {
       minTimeElapsedRef.current = true;
       tryStartListening();
-    }, 15000);
-    const fallbackTimer = setTimeout(() => setShowFallback(true), 18000);
+    }, 15000) : null;
+    const fallbackTimer = setTimeout(() => setShowFallback(true), isMobile ? 18000 : 8000);
     return () => {
-      clearTimeout(minTimer);
+      if (minTimer) clearTimeout(minTimer);
       clearTimeout(fallbackTimer);
     };
   }, [started, tryStartListening]);
