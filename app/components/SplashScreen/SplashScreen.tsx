@@ -36,17 +36,15 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     setLoadProgress(pct);
   }, []);
 
-  // After start: show fallback button at 5s, start mic at 10s
+  // After start: request mic immediately, show fallback at 5s
   useEffect(() => {
     if (!started) return;
+    // Start mic right away — permission prompt appears during assembly/audio
+    // By the time audio finishes, mic is already listening
+    startListening();
     const fallbackTimer = setTimeout(() => setShowFallback(true), 5000);
-    const micTimer = setTimeout(() => {
-      console.log('[SplashScreen] Starting clap detection...');
-      startListening();
-    }, 10000);
     return () => {
       clearTimeout(fallbackTimer);
-      clearTimeout(micTimer);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started]);
