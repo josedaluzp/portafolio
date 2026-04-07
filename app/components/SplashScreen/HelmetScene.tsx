@@ -8,6 +8,7 @@ interface HelmetSceneProps {
   started: boolean;
   onModelLoaded?: () => void;
   loadProgress?: (pct: number) => void;
+  onAudioEnd?: () => void;
 }
 
 // Easing function
@@ -15,7 +16,7 @@ function easeOutCubic(t: number): number {
   return 1 - (1 - t) ** 3;
 }
 
-export default function HelmetScene({ started, onModelLoaded, loadProgress }: HelmetSceneProps) {
+export default function HelmetScene({ started, onModelLoaded, loadProgress, onAudioEnd }: HelmetSceneProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   // All mutable Three.js / audio state lives in a single ref to avoid stale closures
@@ -116,18 +117,30 @@ export default function HelmetScene({ started, onModelLoaded, loadProgress }: He
       s.audioCtx.resume();
     }
 
-    s.audio.currentTime = 0;
-    s.audio.play().catch(() => {
-      // Autoplay blocked — silently ignore
-    });
-    s.isSpeaking = true;
-    s.audioPlayed = true;
+    let audioEndFired = false;
+    const fireAudioEnd = () => {
+      if (audioEndFired) return;
+      audioEndFired = true;
+      onAudioEnd?.();
+    };
 
     s.audio.onended = () => {
       s.isSpeaking = false;
       s.wordPulse = 0;
+      fireAudioEnd();
     };
-  }, []);
+
+    s.audio.currentTime = 0;
+    s.audio.play().catch(() => {
+      // Autoplay truly blocked — only fire if audio isn't actually playing
+      if (s.audio?.paused) {
+        setTimeout(fireAudioEnd, 3000);
+      }
+      // If audio IS playing despite rejection, onended will handle it
+    });
+    s.isSpeaking = true;
+    s.audioPlayed = true;
+  }, [onAudioEnd]);
 
   // Keep started prop in sync with ref
   useEffect(() => {

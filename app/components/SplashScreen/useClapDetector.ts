@@ -13,7 +13,8 @@ function useClapDetector(options?: UseClapDetectorOptions): {
   detected: boolean;
   clapCount: number;
   micAvailable: boolean | null;
-  startListening: () => Promise<void>;
+  requestPermission: () => Promise<void>;
+  startListening: () => void;
 } {
   const {
     requiredClaps = 2,
@@ -52,8 +53,9 @@ function useClapDetector(options?: UseClapDetectorOptions): {
     sourceRef.current = null;
   }, []);
 
-  const startListening = useCallback(async () => {
-    if (detectedRef.current) return;
+  // Phase 1: Just acquire mic permission + set up audio nodes (no detection yet)
+  const requestPermission = useCallback(async () => {
+    if (detectedRef.current || streamRef.current) return;
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -63,7 +65,6 @@ function useClapDetector(options?: UseClapDetectorOptions): {
       const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
 
-      // Chrome requires resume() — AudioContext starts suspended outside direct user gesture
       if (audioContext.state === 'suspended') {
         await audioContext.resume();
       }
@@ -75,52 +76,55 @@ function useClapDetector(options?: UseClapDetectorOptions): {
       const source = audioContext.createMediaStreamSource(stream);
       source.connect(analyser);
       sourceRef.current = source;
-
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-      const detect = () => {
-        if (!analyserRef.current || detectedRef.current) return;
-
-        analyserRef.current.getByteFrequencyData(dataArray);
-
-        // Average energy in bins 23–93 (approximately 2–8 kHz range)
-        let sum = 0;
-        for (let i = 23; i <= 93; i++) {
-          sum += dataArray[i];
-        }
-        const energy = sum / (93 - 23 + 1);
-
-        const now = Date.now();
-
-        if (energy > 35 && now - lastClapTimeRef.current > cooldown) {
-          lastClapTimeRef.current = now;
-          clapTimestampsRef.current.push(now);
-
-          // Remove claps outside the detection window
-          clapTimestampsRef.current = clapTimestampsRef.current.filter(
-            (t) => now - t <= clapWindow
-          );
-
-          const count = clapTimestampsRef.current.length;
-          setClapCount(count);
-
-          if (count >= requiredClaps) {
-            detectedRef.current = true;
-            setDetected(true);
-            cleanup();
-            return;
-          }
-        }
-
-        animationFrameRef.current = requestAnimationFrame(detect);
-      };
-
-      animationFrameRef.current = requestAnimationFrame(detect);
     } catch {
-      // Permission denied or device unavailable
       setMicAvailable(false);
     }
-  }, [enabled, requiredClaps, clapWindow, cooldown, cleanup]);
+  }, []);
+
+  // Phase 2: Start the detection loop (mic must already be acquired)
+  const startListening = useCallback(() => {
+    if (detectedRef.current || !analyserRef.current) return;
+
+    const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+
+    const detect = () => {
+      if (!analyserRef.current || detectedRef.current) return;
+
+      analyserRef.current.getByteFrequencyData(dataArray);
+
+      // Average energy in bins 23–93 (approximately 2–8 kHz range)
+      let sum = 0;
+      for (let i = 23; i <= 93; i++) {
+        sum += dataArray[i];
+      }
+      const energy = sum / (93 - 23 + 1);
+
+      const now = Date.now();
+
+      if (energy > 35 && now - lastClapTimeRef.current > cooldown) {
+        lastClapTimeRef.current = now;
+        clapTimestampsRef.current.push(now);
+
+        clapTimestampsRef.current = clapTimestampsRef.current.filter(
+          (t) => now - t <= clapWindow
+        );
+
+        const count = clapTimestampsRef.current.length;
+        setClapCount(count);
+
+        if (count >= requiredClaps) {
+          detectedRef.current = true;
+          setDetected(true);
+          cleanup();
+          return;
+        }
+      }
+
+      animationFrameRef.current = requestAnimationFrame(detect);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(detect);
+  }, [requiredClaps, clapWindow, cooldown, cleanup]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -129,7 +133,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
     };
   }, [cleanup]);
 
-  return { detected, clapCount, micAvailable, startListening };
+  return { detected, clapCount, micAvailable, requestPermission, startListening };
 }
 
 export default useClapDetector;

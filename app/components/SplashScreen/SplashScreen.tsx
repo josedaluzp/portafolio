@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import MatrixBackground from './MatrixBackground';
 import HelmetScene from './HelmetScene';
 import useClapDetector from './useClapDetector';
@@ -16,10 +16,24 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
   const [exiting, setExiting] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
 
-  const { detected, clapCount, startListening } = useClapDetector({
-    requiredClaps: 1,
+  const { detected, clapCount, requestPermission, startListening } = useClapDetector({
+    requiredClaps: 2,
     enabled: started,
   });
+
+  // Track both conditions: audio ended AND minimum time elapsed
+  const audioEndedRef = useRef(false);
+  const minTimeElapsedRef = useRef(false);
+  const listeningStartedRef = useRef(false);
+
+  const tryStartListening = useCallback(async () => {
+    if (listeningStartedRef.current) return;
+    if (audioEndedRef.current && minTimeElapsedRef.current) {
+      listeningStartedRef.current = true;
+      await requestPermission();
+      startListening();
+    }
+  }, [requestPermission, startListening]);
 
   // Handle click-to-start
   const handleStart = useCallback(() => {
@@ -36,18 +50,26 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     setLoadProgress(pct);
   }, []);
 
-  // After start: request mic immediately, show fallback at 5s
+  // Audio finished — mark condition and try to start listening
+  const handleAudioEnd = useCallback(() => {
+    audioEndedRef.current = true;
+    tryStartListening();
+  }, [tryStartListening]);
+
+  // Minimum 9s after click before mic can activate (covers animation + full audio)
+  // Also show fallback button after 12s
   useEffect(() => {
     if (!started) return;
-    // Start mic right away — permission prompt appears during assembly/audio
-    // By the time audio finishes, mic is already listening
-    startListening();
-    const fallbackTimer = setTimeout(() => setShowFallback(true), 5000);
+    const minTimer = setTimeout(() => {
+      minTimeElapsedRef.current = true;
+      tryStartListening();
+    }, 15000);
+    const fallbackTimer = setTimeout(() => setShowFallback(true), 18000);
     return () => {
+      clearTimeout(minTimer);
       clearTimeout(fallbackTimer);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [started]);
+  }, [started, tryStartListening]);
 
   // Handle clap detection
   useEffect(() => {
@@ -79,6 +101,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
         started={started}
         onModelLoaded={handleModelLoaded}
         loadProgress={handleLoadProgress}
+        onAudioEnd={handleAudioEnd}
       />
 
       {/* Click-to-start overlay */}
