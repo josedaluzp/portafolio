@@ -84,7 +84,7 @@ function useClapDetector(options?: UseClapDetectorOptions): {
 
         const now = Date.now();
 
-        if (energy > 155 && now - lastClapTimeRef.current > cooldown) {
+        if (energy > 130 && now - lastClapTimeRef.current > cooldown) {
           lastClapTimeRef.current = now;
           clapTimestampsRef.current.push(now);
 
