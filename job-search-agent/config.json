@@ -1,0 +1,84 @@
+{
+  "daily_application_cap": 10,
+  "duplicate_check_days_threshold": 60,
+  "date_posted_filter": "última semana",
+  "locations": [
+    "Argentina",
+    "Remoto - América Latina",
+    "Remoto - Europa",
+    "Remoto - Global"
+  ],
+  "workplace_types": [
+    "remoto",
+    "híbrido (Córdoba o Comodoro Rivadavia)"
+  ],
+  "experience_levels": [
+    "junior avanzado",
+    "semi-senior"
+  ],
+  "excluded_companies": [
+    "Inforge",
+    "Tenfold",
+    "usetenfold.ai"
+  ],
+  "excluded_keywords": [
+    "Lead",
+    "Principal",
+    "Staff",
+    "Arquitecto",
+    "Architect",
+    "Manager",
+    "Head of",
+    "Director",
+    "5+ años",
+    "6+ años",
+    "7+ años",
+    "8+ años",
+    "10+ años",
+    "5+ years",
+    "6+ years",
+    "7+ years",
+    "8+ years",
+    "10+ years",
+    "autorización de trabajo en EEUU",
+    "US work authorization",
+    "must reside in the US",
+    "debe residir en EEUU",
+    "solo freelance",
+    "pago por tarea",
+    "unpaid",
+    "internship no remunerada"
+  ],
+  "search_runs": [
+    {
+      "search_query": "AI Engineer",
+      "role_profile": "ai_engineer",
+      "max_applications": 4,
+      "platform": ["linkedin", "indeed"]
+    },
+    {
+      "search_query": "Automation Engineer",
+      "role_profile": "automation_engineer",
+      "max_applications": 2,
+      "platform": ["linkedin", "indeed"]
+    },
+    {
+      "search_query": "Python Developer",
+      "role_profile": "backend_python",
+      "max_applications": 2,
+      "platform": ["linkedin", "indeed"]
+    },
+    {
+      "search_query": "Full Stack Developer",
+      "role_profile": "fullstack",
+      "max_applications": 2,
+      "platform": ["linkedin", "indeed"]
+    }
+  ],
+  "role_profiles_enabled": {
+    "ai_engineer": true,
+    "automation_engineer": true,
+    "backend_python": true,
+    "fullstack": true
+  }
+}

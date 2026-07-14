@@ -1,0 +1,157 @@
+{
+  "personal": {
+    "nombre": "Jose Da Luz Pereira",
+    "email_principal": "josedaluzpereira1509@gmail.com",
+    "email_ats": "daluzpereira_jose@yahoo.com",
+    "telefono": "+54 9 297 502-7842",
+    "ciudad": "Córdoba, Argentina",
+    "linkedin": "https://www.linkedin.com/in/josedaluzpereira",
+    "nacionalidad": "Argentino y Portugués (pasaporte UE)",
+    "idiomas": "Español (nativo), Inglés (B2 profesional)",
+    "autorizacion_trabajo": "Habilitado para trabajar en Argentina y en la Unión Europea sin sponsorship",
+    "zona_horaria": "ART (UTC-3)"
+  },
+  "role_profiles": {
+    "ai_engineer": {
+      "role_title": "AI Engineer / LLM Engineer",
+      "summary": "AI Engineer con ~1,5 años construyendo agentes conversacionales y asistentes basados en LLMs en producción con LangChain. Diseño e implemento cadenas de prompts, herramientas y memorias, además de pipelines RAG para consultas sobre documentos, bases de datos y APIs. Integro modelos de OpenAI, Llama y HuggingFace y expongo servicios mediante APIs RESTful en FastAPI. Enfocado en automatizar procesos, mejorar la trazabilidad y acelerar la operación del equipo.",
+      "highlight_skills": [
+        "LangChain",
+        "LLMs (OpenAI, Llama, HuggingFace)",
+        "RAG (Retrieval-Augmented Generation)",
+        "Orquestación de agentes y herramientas",
+        "Python",
+        "FastAPI",
+        "Bases de datos / SQL",
+        "n8n"
+      ]
+    },
+    "automation_engineer": {
+      "role_title": "Automation Engineer",
+      "summary": "Automation Engineer con experiencia diseñando flujos de trabajo con n8n y agentes basados en LLMs que reducen el trabajo manual y aceleran la operación. Orquesto cadenas de prompts, herramientas y memorias, e integro APIs externas (OpenAI, HuggingFace) para automatizar procesos de punta a punta. Construyo el backend de estas automatizaciones en Python y FastAPI, priorizando la trazabilidad y la confiabilidad en producción.",
+      "highlight_skills": [
+        "n8n",
+        "Automatización de workflows",
+        "Agentes basados en LLMs",
+        "Integración de APIs (OpenAI, HuggingFace)",
+        "Python",
+        "FastAPI",
+        "Pipelines de datos",
+        "LangChain"
+      ]
+    },
+    "backend_python": {
+      "role_title": "Python Backend Developer",
+      "summary": "Desarrollador Backend en Python con foco en FastAPI, diseñando APIs RESTful optimizadas para producción con documentación automática vía Swagger. Implemento pipelines de datos y sistemas de recuperación de información (RAG) sobre bases de datos y APIs externas. Combino sólidas prácticas de testing (Certified Software Tester) con integración de servicios de LLMs para entregar backends confiables y mantenibles.",
+      "highlight_skills": [
+        "Python",
+        "FastAPI",
+        "APIs RESTful / Swagger",
+        "Bases de datos / SQL",
+        "Pipelines de datos",
+        "Integración de APIs externas",
+        "Testing de APIs (Postman)",
+        "RAG"
+      ]
+    },
+    "fullstack": {
+      "role_title": "Full Stack Developer",
+      "summary": "Desarrollador Full Stack cómodo tanto en el backend con Python/FastAPI como en el frontend con JavaScript, TypeScript, HTML y CSS. Construyo APIs RESTful y las conecto con interfaces web, integrando además capacidades de LLMs y automatizaciones con n8n. Aporto prácticas de testing y un enfoque orientado a reducir trabajo manual y mejorar la operación del producto de extremo a extremo.",
+      "highlight_skills": [
+        "JavaScript / TypeScript",
+        "Python",
+        "FastAPI",
+        "HTML y CSS",
+        "APIs RESTful",
+        "Bases de datos / SQL",
+        "n8n",
+        "Integración de LLMs"
+      ]
+    }
+  },
+  "experience": [
+    {
+      "empresa": "Inforge",
+      "rol": "AI Engineer",
+      "fecha_inicio": "abril 2025",
+      "fecha_fin": "actualidad",
+      "cliente": null,
+      "descripcion": "Ingeniero en IA con foco en automatización de procesos y construcción de soluciones internas basadas en LLMs. Diseño e implemento flujos que reducen el trabajo manual, mejoran la trazabilidad y aceleran la operación del equipo.",
+      "responsabilidades": [
+        "Construcción de agentes conversacionales inteligentes y asistentes virtuales personalizados mediante LangChain.",
+        "Orquestación de cadenas de prompts, herramientas y memorias para resolver tareas complejas de procesamiento de lenguaje natural.",
+        "Integración con modelos OpenAI, Llama, HuggingFace y otras APIs externas para generar respuestas contextuales y precisas.",
+        "Diseño de APIs RESTful con FastAPI, optimizadas para despliegue en producción (incluyendo documentación automática con Swagger).",
+        "Implementación de pipelines de datos y sistemas de recuperación de información (RAG) para consultas sobre documentos, bases de datos o APIs."
+      ],
+      "tech_stack": [
+        "Python",
+        "LangChain",
+        "FastAPI",
+        "OpenAI",
+        "Llama",
+        "HuggingFace",
+        "RAG",
+        "n8n",
+        "SQL"
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institucion": "Universidad Siglo 21",
+      "titulo": "Ingeniería en Software",
+      "fecha_inicio": "2021",
+      "fecha_fin": "Presente"
+    },
+    {
+      "institucion": "E.S.E.T.P. Nº749 'Gral. Ing. Alonso Baldrich'",
+      "titulo": "Técnico en Industrias de Procesos",
+      "fecha_inicio": "2013",
+      "fecha_fin": "2019"
+    }
+  ],
+  "certifications": [
+    "Claude Code in Action - Anthropic",
+    "Introduction to agent skills - Anthropic",
+    "ai-fluency-framework-foundations - Anthropic",
+    "claude-101 - Anthropic",
+    "ai-fluency-for-nonprofits - Anthropic",
+    "Curso de n8n - Udemy",
+    "Data Analyst - Platzi",
+    "Curso de Bases de Datos con SQL - Platzi",
+    "Certified Software Tester (CSTE) - Udemy",
+    "API Testing con Postman - Udemy",
+    "Diseño Web Profesional - Udemy"
+  ],
+  "skills_all": [
+    "Claude",
+    "Python",
+    "LangChain",
+    "JavaScript",
+    "TypeScript",
+    "Java",
+    "HTML",
+    "CSS",
+    "LLMs",
+    "n8n",
+    "Bases de datos",
+    "SQL",
+    "FastAPI",
+    "RAG",
+    "OpenAI",
+    "Llama",
+    "HuggingFace",
+    "APIs RESTful",
+    "Swagger",
+    "Pipelines de datos",
+    "Postman / API Testing",
+    "Software Testing (CSTE)"
+  ],
+  "job_preferences": {
+    "modalidad_deseada": "Remoto, o híbrido en Córdoba o Comodoro Rivadavia",
+    "rango_salarial": "USD 2.500–3.000/mes neto",
+    "disponible_desde": "Inmediato",
+    "notas": "Habilitado para trabajar en Argentina y en la Unión Europea (pasaporte portugués/UE) sin sponsorship. Zona horaria ART (UTC-3). ~1,5 años de experiencia como AI Engineer. Niveles buscados: junior avanzado a semi-senior."
+  }
+}
