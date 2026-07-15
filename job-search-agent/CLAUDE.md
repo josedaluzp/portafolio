@@ -84,6 +84,25 @@ sigue. **Alcance realista: solo LinkedIn Easy Apply se automatiza de punta a
 punta**; el resto queda `Incompleto` para completar a mano. Los pasos manuales
 de las secciones (c)/(d) siguen valiendo para lo que el runner no cubre.
 
+**Verificar contra el LinkedIn real (recomendado la 1ra vez)**:
+
+```
+python agent_run.py --verify --only ai_engineer
+```
+
+Abre LinkedIn real, reporta cuántas ofertas ve, títulos/empresas de muestra y
+si detecta el botón Easy Apply — SIN postular. Guarda `logs/verify_linkedin.png`
+y `logs/verify_first_card.html`. Si algo sale en 0 o vacío, LinkedIn cambió su
+DOM: actualizá los selectores en el diccionario `SEL` de `agent_run.py` (tiene
+varios fallbacks por campo, en inglés y español).
+
+**Test del motor sin navegar** (control de flujo Easy Apply, casos de aborto):
+
+```
+python test_easyapply.py     # 5/5 esperado
+python agent_run.py --self-test
+```
+
 ## c-ter) Corrida diaria automática (Windows, 08:00)
 
 - `run_daily.bat` lanza `python agent_run.py` desde su propia carpeta y guarda
