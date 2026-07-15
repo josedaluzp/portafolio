@@ -84,6 +84,28 @@ sigue. **Alcance realista: solo LinkedIn Easy Apply se automatiza de punta a
 punta**; el resto queda `Incompleto` para completar a mano. Los pasos manuales
 de las secciones (c)/(d) siguen valiendo para lo que el runner no cubre.
 
+## c-ter) Corrida diaria automática (Windows, 08:00)
+
+- `run_daily.bat` lanza `python agent_run.py` desde su propia carpeta y guarda
+  la salida en `logs/run_YYYY-MM-DD.log`.
+- `schedule_windows.ps1` registra una Tarea Programada ("AgenteBusquedaEmpleo")
+  que lo ejecuta **todos los días a las 08:00** (ART). Setup una sola vez:
+
+  ```
+  powershell -ExecutionPolicy Bypass -File .\schedule_windows.ps1
+  ```
+
+  Otra hora: `... schedule_windows.ps1 -Hora "13:00"`.
+  Correr ya: `Start-ScheduledTask -TaskName "AgenteBusquedaEmpleo"`.
+  Quitar:    `Unregister-ScheduledTask -TaskName "AgenteBusquedaEmpleo" -Confirm:$false`.
+
+- **Requisitos de la corrida desatendida**: la PC debe estar encendida (o la
+  tarea la despierta / corre al prenderla) y con la sesión de Windows del
+  usuario. La **sesión de LinkedIn** guardada en `.browser_profile/` caduca
+  cada varias semanas; cuando eso pase, las corridas registrarán `Incompleto`
+  o no encontrarán ofertas → volver a correr `python agent_run.py --headful`
+  una vez para re-loguearse.
+
 ## c) Procedimiento estándar para LinkedIn (paso a paso)
 
 1. **Navegar a LinkedIn Jobs** con la `search_query` del run actual, aplicando
