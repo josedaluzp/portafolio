@@ -158,6 +158,23 @@ Campos JSON: `id`, `date` (YYYY-MM-DD), `company`, `role`, `role_profile`,
 Mantener **ambos archivos sincronizados**: una fila en el xlsx por cada entrada
 del json.
 
+**Forma recomendada de registrar** (mantiene JSON + XLSX sincronizados y
+re-valida anti-duplicado y cap automáticamente):
+
+```
+python record_application.py \
+  --company "<Empresa>" --role "<Rol>" --role-profile <id> \
+  --search-query "<query>" --location "<ubicación>" \
+  --platform <linkedin|indeed> --jd-url "<url>" \
+  --status "Aplicado"            # o "Incompleto - <motivo>"
+```
+
+- El helper asigna el `id` correlativo del día, completa `resume_pdf` según el
+  perfil, rechaza duplicados (Reglas 1–4) y rechaza si se agotó el cap de la
+  query o el diario. Las incompletas se registran pero no consumen cupo.
+- Usar `--dry-run` para ver qué registraría sin escribir; `--force` para
+  saltear validaciones (sólo en casos excepcionales).
+
 ---
 
 ## Notas de handoff — historial
