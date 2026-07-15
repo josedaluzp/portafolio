@@ -1,0 +1,4 @@
+# Perfil del navegador con la sesión iniciada — NUNCA versionar (contiene cookies/sesión)
+.browser_profile/
+__pycache__/
+*.pyc

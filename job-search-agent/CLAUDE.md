@@ -54,6 +54,36 @@ remaining     = max_applications - applied_today
 
 ---
 
+## c-bis) Modo TOTALMENTE AUTOMÁTICO (agent_run.py)
+
+Para automatizar el clickeo en LinkedIn (Easy Apply) existe `agent_run.py`,
+que corre **en la máquina del candidato** (no en la nube) con Playwright.
+
+Setup (una vez):
+
+```
+pip install -r requirements.txt
+playwright install chromium
+python agent_run.py --headful      # abrí, logueate a LinkedIn a mano, ENTER
+```
+
+Corridas siguientes:
+
+```
+python agent_run.py                # todos los perfiles habilitados
+python agent_run.py --only ai_engineer
+python agent_run.py --dry-run      # evalúa sin postular ni registrar
+python agent_run.py --self-test    # valida la lógica pura sin navegador
+```
+
+El runner respeta TODO lo de las secciones (a)-(e): calcula remaining, aplica
+exclusiones, corre el guard anti-duplicado, sube el CV del perfil, destilda
+"Seguir empresa" y registra con `record_application.py`. Ante CAPTCHA, campos
+de identidad, preguntas custom o postulación externa → marca `Incompleto` y
+sigue. **Alcance realista: solo LinkedIn Easy Apply se automatiza de punta a
+punta**; el resto queda `Incompleto` para completar a mano. Los pasos manuales
+de las secciones (c)/(d) siguen valiendo para lo que el runner no cubre.
+
 ## c) Procedimiento estándar para LinkedIn (paso a paso)
 
 1. **Navegar a LinkedIn Jobs** con la `search_query` del run actual, aplicando
