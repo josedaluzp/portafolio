@@ -202,19 +202,19 @@ def try_easy_apply(page, resume_path):
                     except Exception:
                         pass
 
-            # ¿Botón de enviar?
+            # ¿Botón de enviar? (solo si es VISIBLE, no basta con existir en el DOM)
             submit = page.locator(
                 "button:has-text('Enviar solicitud'), button:has-text('Submit application')").first
-            if submit.count() > 0 and submit.is_enabled():
+            if submit.count() > 0 and submit.is_visible() and submit.is_enabled():
                 submit.click(timeout=8000)
                 page.wait_for_timeout(1500)
                 return True, "Aplicado (Easy Apply)"
 
-            # Si no, avanzar al siguiente paso
+            # Si no, avanzar al siguiente paso (solo botones visibles)
             nxt = page.locator(
                 "button:has-text('Siguiente'), button:has-text('Next'), "
                 "button:has-text('Revisar'), button:has-text('Review')").first
-            if nxt.count() > 0 and nxt.is_enabled():
+            if nxt.count() > 0 and nxt.is_visible() and nxt.is_enabled():
                 nxt.click(timeout=8000)
                 page.wait_for_timeout(1200)
                 continue
